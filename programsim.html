@@ -1,0 +1,1258 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบลงทะเบียนผู้ใช้</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f8f8;
+            overflow: hidden;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .modal {
+            transition: opacity 0.3s ease;
+        }
+        .tab-active {
+            border-bottom: 2px solid #3b82f6;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8">
+				<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/padipan/krujay/blob/gh-pages/img/1.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+				<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/padipan/krujay/blob/gh-pages/img/2.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+        <!-- Registration Form Section -->
+        <div id="registrationSection" class="bg-white rounded-lg shadow-lg p-6 mb-8">
+		<h1 class="text-2xl font-bold text-center text-blue-800 mb-6">ลงทะเบียนผู้ใช้งานซิมการ์ด</h1>
+            <form id="registrationForm" class="space-y-6">
+                <!-- Personal Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">คำนำหน้าชื่อ</label>
+                        <select id="title" name="title" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">เลือกคำนำหน้าชื่อ</option>
+                            <option value="นาย">นาย</option>
+                            <option value="นาง">นาง</option>
+                            <option value="นางสาว">นางสาว</option>
+							<option value="อื่นๆ">อื่นๆ</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">ชื่อ</label>
+                        <input type="text" id="firstName" name="firstName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">นามสกุล</label>
+                        <input type="text" id="lastName" name="lastName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    
+                    <div>
+                        <label for="birthDate" class="block text-sm font-medium text-gray-700 mb-1">วันเดือนปีเกิด</label>
+                        <input type="date" id="birthDate" name="birthDate" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <!-- Contact Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="registeredPhone" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรที่ลงทะเบียน</label>
+                        <input type="tel" id="registeredPhone" name="registeredPhone" pattern="[0-9]{10}" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0xxxxxxxxx">
+                    </div>
+                    
+                    <div>
+                        <label for="currentPhone" class="block text-sm font-medium text-gray-700 mb-1">เบอร์โทรติดต่อปัจจุบัน</label>
+                        <input type="tel" id="currentPhone" name="currentPhone" pattern="[0-9]{10}" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0xxxxxxxxx">
+                    </div>
+                    
+                    <div>
+                        <label for="simNetwork" class="block text-sm font-medium text-gray-700 mb-1">เครือข่ายซิม</label>
+                        <select id="simNetwork" name="simNetwork" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">เลือกเครือข่าย</option>
+                            <option value="AIS">AIS</option>
+                            <option value="DTAC">DTAC</option>
+                            <option value="TRUE">TRUE</option>
+                            <option value="NT">NT</option>
+                            <option value="อื่นๆ">อื่นๆ</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Image Uploads -->
+                <div class="space-y-6">
+                    <h2 class="text-lg font-semibold text-gray-800">อัปโหลดรูปภาพ</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- ID Card Image -->
+                        <div class="space-y-2">
+							<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/Programthanarich/program.github.io/blob/main/img/3.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+                            <label class="block text-sm font-medium text-gray-700">รูปบัตรประชาชน</label>
+                            <div class="image-preview" id="idCardPreview">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <input type="file" id="idCardImage" name="idCardImage" accept="image/*" class="hidden" required>
+                                <button type="button" onclick="document.getElementById('idCardImage').click()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    เลือกรูปภาพ
+                                </button>
+                                <span id="idCardImageName" class="ml-2 text-sm text-gray-500">ยังไม่ได้เลือกไฟล์</span>
+                            </div>
+                            <div class="text-xs text-gray-500">ตัวอย่าง: รูปบัตรประชาชนที่ชัดเจน</div>
+                        </div>
+                        
+                        <!-- SIM Card Back Image -->
+                        <div class="space-y-2">
+						<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/Programthanarich/program.github.io/blob/main/img/4.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+                            <label class="block text-sm font-medium text-gray-700">รูปหลังซิม</label>
+                            <div class="image-preview" id="simBackPreview">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <input type="file" id="simBackImage" name="simBackImage" accept="image/*" class="hidden" required>
+                                <button type="button" onclick="document.getElementById('simBackImage').click()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    เลือกรูปภาพ
+                                </button>
+                                <span id="simBackImageName" class="ml-2 text-sm text-gray-500">ยังไม่ได้เลือกไฟล์</span>
+                            </div>
+                            <div class="text-xs text-gray-500">ตัวอย่าง: รูปด้านหลังซิมที่เห็นหมายเลขชัดเจน</div>
+                        </div>
+                        
+                        <!-- Face Image -->
+                        <div class="space-y-2">
+						<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/padipan/krujay/blob/gh-pages/img/1.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+                            <label class="block text-sm font-medium text-gray-700">รูปหน้าตรง</label>
+                            <div class="image-preview" id="facePreview">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <input type="file" id="faceImage" name="faceImage" accept="image/*" class="hidden" required>
+                                <button type="button" onclick="document.getElementById('faceImage').click()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    เลือกรูปภาพ
+                                </button>
+                                <span id="faceImageName" class="ml-2 text-sm text-gray-500">ยังไม่ได้เลือกไฟล์</span>
+                            </div>
+                            <div class="text-xs text-gray-500">ตัวอย่าง: รูปหน้าตรงที่เห็นใบหน้าชัดเจน</div>
+                        </div>
+                        
+                        <!-- Face with Envelope Image -->
+                        <div class="space-y-2">
+						<div class="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
+					<img src="https://github.com/padipan/krujay/blob/gh-pages/img/1.png?raw=true" alt="Image 1" class="object-cover rounded-lg shadow-md">
+				</div>
+                            <label class="block text-sm font-medium text-gray-700">รูปหน้าตรงถือซอง</label>
+                            <div class="image-preview" id="faceWithEnvelopePreview">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                </svg>
+                            </div>
+                            <div class="flex items-center mt-2">
+                                <input type="file" id="faceWithEnvelopeImage" name="faceWithEnvelopeImage" accept="image/*" class="hidden" required>
+                                <button type="button" onclick="document.getElementById('faceWithEnvelopeImage').click()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    เลือกรูปภาพ
+                                </button>
+                                <span id="faceWithEnvelopeImageName" class="ml-2 text-sm text-gray-500">ยังไม่ได้เลือกไฟล์</span>
+                            </div>
+                            <div class="text-xs text-gray-500">ตัวอย่าง: รูปหน้าตรงพร้อมถือซอง</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="flex justify-center">
+                    <button type="submit" class="px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition duration-300">
+                        ส่งข้อมูลลงทะเบียน
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Admin Login Section -->
+        <div id="adminLoginSection" class="bg-white rounded-lg shadow-lg p-6 mb-8 hidden">
+            <h1 class="text-2xl font-bold text-center text-blue-800 mb-6">เข้าสู่ระบบผู้ดูแล</h1>
+            
+            <form id="adminLoginForm" class="space-y-6 max-w-md mx-auto">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้</label>
+                    <input type="text" id="username" name="username" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                    <input type="password" id="password" name="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="flex justify-center">
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300">
+                        เข้าสู่ระบบ
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Admin Dashboard Section -->
+        <div id="adminDashboardSection" class="bg-white rounded-lg shadow-lg p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-blue-800">ระบบจัดการข้อมูลผู้ลงทะเบียน</h1>
+                <button id="logoutBtn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    ออกจากระบบ
+                </button>
+            </div>
+            
+            <!-- Admin Tabs -->
+            <div class="border-b border-gray-200 mb-6">
+                <ul class="flex flex-wrap -mb-px">
+                    <li class="mr-2">
+                        <button id="tabRegistrations" class="inline-block p-4 tab-active">ข้อมูลผู้ลงทะเบียน</button>
+                    </li>
+                    <li class="mr-2">
+                        <button id="tabImages" class="inline-block p-4 text-gray-500 hover:text-blue-600">รูปภาพทั้งหมด</button>
+                    </li>
+                    <li class="mr-2">
+                        <button id="tabSummary" class="inline-block p-4 text-gray-500 hover:text-blue-600">สรุปข้อมูล</button>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Tab Content: Registrations -->
+            <div id="contentRegistrations" class="tab-content">
+                <!-- Summary Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-blue-100 p-4 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold text-blue-800">จำนวนผู้ลงทะเบียนทั้งหมด</h3>
+                        <p id="totalRegistrations" class="text-3xl font-bold text-blue-600">0</p>
+                    </div>
+                    <div class="bg-green-100 p-4 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold text-green-800">ลงทะเบียนวันนี้</h3>
+                        <p id="todayRegistrations" class="text-3xl font-bold text-green-600">0</p>
+                    </div>
+                    <div class="bg-purple-100 p-4 rounded-lg shadow">
+                        <h3 class="text-lg font-semibold text-purple-800">เครือข่ายยอดนิยม</h3>
+                        <p id="popularNetwork" class="text-3xl font-bold text-purple-600">-</p>
+                    </div>
+                </div>
+                
+                <!-- Data Table -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b text-left">ลำดับ</th>
+                                <th class="py-2 px-4 border-b text-left">ชื่อ-นามสกุล</th>
+                                <th class="py-2 px-4 border-b text-left">เบอร์โทร</th>
+                                <th class="py-2 px-4 border-b text-left">เครือข่าย</th>
+                                <th class="py-2 px-4 border-b text-left">วันที่ลงทะเบียน</th>
+                                <th class="py-2 px-4 border-b text-left">สถานะ</th>
+                                <th class="py-2 px-4 border-b text-left">การดำเนินการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registrationTableBody">
+                            <!-- Data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tab Content: Images -->
+            <div id="contentImages" class="tab-content hidden">
+                <div class="mb-4">
+                    <button id="refreshImagesBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        รีเฟรชข้อมูล
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="imageGallery">
+                    <!-- Images will be populated here -->
+                </div>
+            </div>
+            
+            <!-- Tab Content: Summary -->
+            <div id="contentSummary" class="tab-content hidden">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Network Distribution -->
+                    <div class="bg-white p-4 rounded-lg shadow border">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">การกระจายตัวของเครือข่าย</h3>
+                        <div id="networkDistribution" class="space-y-2">
+                            <!-- Network data will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Registration Status -->
+                    <div class="bg-white p-4 rounded-lg shadow border">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">สถานะการลงทะเบียน</h3>
+                        <div id="statusDistribution" class="space-y-2">
+                            <!-- Status data will be populated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Daily Registrations -->
+                    <div class="bg-white p-4 rounded-lg shadow border col-span-1 md:col-span-2">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">การลงทะเบียนรายวัน (7 วันล่าสุด)</h3>
+                        <div id="dailyRegistrations" class="h-64 flex items-end space-x-2">
+                            <!-- Daily registration data will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="mt-8 text-center">
+            <button id="toggleAdminBtn" class="text-blue-600 hover:text-blue-800 underline">
+                เข้าสู่ระบบผู้ดูแล
+            </button>
+        </div>
+    </div>
+    
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+            <div class="loader"></div>
+            <p class="mt-4 text-lg font-medium">กำลังดำเนินการ กรุณารอสักครู่...</p>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-md mx-auto">
+            <div class="text-green-500 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-gray-800 mb-2">ดำเนินการสำเร็จ</h2>
+            <p id="successMessage" class="text-gray-600 mb-4">บันทึกข้อมูลเรียบร้อยแล้ว</p>
+            <button id="closeSuccessModal" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
+                ตกลง
+            </button>
+        </div>
+    </div>
+    
+    <!-- View User Modal -->
+    <div id="viewUserModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden modal">
+        <div class="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto w-full max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">ข้อมูลผู้ลงทะเบียน</h2>
+                <button id="closeViewUserModal" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-2">ข้อมูลส่วนตัว</h3>
+                    <div class="space-y-2">
+                        <p><span class="font-medium">ชื่อ-นามสกุล:</span> <span id="viewFullName"></span></p>
+                        <p><span class="font-medium">วันเดือนปีเกิด:</span> <span id="viewBirthDate"></span></p>
+                        <p><span class="font-medium">เบอร์โทรที่ลงทะเบียน:</span> <span id="viewRegisteredPhone"></span></p>
+                        <p><span class="font-medium">เบอร์โทรติดต่อปัจจุบัน:</span> <span id="viewCurrentPhone"></span></p>
+                        <p><span class="font-medium">เครือข่ายซิม:</span> <span id="viewSimNetwork"></span></p>
+                        <p><span class="font-medium">วันที่ลงทะเบียน:</span> <span id="viewRegistrationDate"></span></p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-semibold text-gray-700 mb-2">สถานะการตรวจสอบ</h3>
+                    <div class="space-y-2">
+                        <p><span class="font-medium">สถานะ:</span> <span id="viewStatus" class="px-2 py-1 rounded text-white bg-yellow-500">รอการตรวจสอบ</span></p>
+                        <div class="mt-4">
+                            <button id="approveBtn" class="px-3 py-1 bg-green-600 text-white rounded mr-2 hover:bg-green-700">อนุมัติ</button>
+                            <button id="rejectBtn" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">ปฏิเสธ</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="font-semibold text-gray-700 mb-2">รูปภาพ</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">รูปบัตรประชาชน</p>
+                        <a id="viewIdCardImageLink" href="#" target="_blank">
+                            <img id="viewIdCardImage" src="" alt="บัตรประชาชน" class="w-full h-40 object-cover rounded border">
+                        </a>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">รูปหลังซิม</p>
+                        <a id="viewSimBackImageLink" href="#" target="_blank">
+                            <img id="viewSimBackImage" src="" alt="หลังซิม" class="w-full h-40 object-cover rounded border">
+                        </a>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">รูปหน้าตรง</p>
+                        <a id="viewFaceImageLink" href="#" target="_blank">
+                            <img id="viewFaceImage" src="" alt="หน้าตรง" class="w-full h-40 object-cover rounded border">
+                        </a>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 mb-1">รูปหน้าตรงถือซอง</p>
+                        <a id="viewFaceWithEnvelopeImageLink" href="#" target="_blank">
+                            <img id="viewFaceWithEnvelopeImage" src="" alt="หน้าตรงถือซอง" class="w-full h-40 object-cover rounded border">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="deleteUserBtn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                    ลบข้อมูล
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- View Image Modal -->
+    <div id="viewImageModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden modal">
+        <div class="max-w-4xl mx-auto w-full p-4">
+            <div class="flex justify-end mb-2">
+                <button id="closeViewImageModal" class="text-white hover:text-gray-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="bg-white p-2 rounded-lg">
+                <img id="modalImage" src="" alt="รูปภาพขยาย" class="max-w-full max-h-[80vh] mx-auto">
+            </div>
+            <div class="text-center mt-4">
+                <p id="modalImageName" class="text-white text-lg"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIrYEldPybx2yJ_RiDXXfVCIu9GPbdl9Isk54Lz3VQwJ6ujtVd4moR9E9Qs2exAfWL/exec';
+        const FOLDER_ID = '1jYV2s7UT-2G9TrvcTgnfBMZgF-oqgKxG';
+        let currentUserData = null;
+        let allRegistrations = [];
+        let allImages = [];
+        
+        // DOM Elements
+        const registrationSection = document.getElementById('registrationSection');
+        const adminLoginSection = document.getElementById('adminLoginSection');
+        const adminDashboardSection = document.getElementById('adminDashboardSection');
+        const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+        const loadingModal = document.getElementById('loadingModal');
+        const successModal = document.getElementById('successModal');
+        const viewUserModal = document.getElementById('viewUserModal');
+        const viewImageModal = document.getElementById('viewImageModal');
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            setupImageUploads();
+            setupFormSubmission();
+            setupAdminLogin();
+            setupAdminDashboard();
+            setupModals();
+            setupTabs();
+        });
+        
+        // Setup image upload previews
+        function setupImageUploads() {
+            const imageInputs = [
+                { input: 'idCardImage', preview: 'idCardPreview', nameSpan: 'idCardImageName' },
+                { input: 'simBackImage', preview: 'simBackPreview', nameSpan: 'simBackImageName' },
+                { input: 'faceImage', preview: 'facePreview', nameSpan: 'faceImageName' },
+                { input: 'faceWithEnvelopeImage', preview: 'faceWithEnvelopePreview', nameSpan: 'faceWithEnvelopeImageName' }
+            ];
+            
+            imageInputs.forEach(item => {
+                const input = document.getElementById(item.input);
+                const preview = document.getElementById(item.preview);
+                const nameSpan = document.getElementById(item.nameSpan);
+                
+                input.addEventListener('change', function() {
+                    if (input.files && input.files[0]) {
+                        const file = input.files[0];
+                        nameSpan.textContent = file.name;
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
+        }
+        
+        // Setup form submission
+        function setupFormSubmission() {
+            const registrationForm = document.getElementById('registrationForm');
+            
+            registrationForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                // Show loading modal
+                showLoading();
+                
+                try {
+                    // Collect form data
+                    const formData = {
+                        title: document.getElementById('title').value,
+                        firstName: document.getElementById('firstName').value,
+                        lastName: document.getElementById('lastName').value,
+                        birthDate: document.getElementById('birthDate').value,
+                        registeredPhone: document.getElementById('registeredPhone').value,
+                        currentPhone: document.getElementById('currentPhone').value,
+                        simNetwork: document.getElementById('simNetwork').value,
+                        timestamp: new Date().toISOString(),
+                        status: 'pending'
+                    };
+                    
+                    // Process images
+                    const imageInputs = [
+                        { id: 'idCardImage', name: 'idCardImage' },
+                        { id: 'simBackImage', name: 'simBackImage' },
+                        { id: 'faceImage', name: 'faceImage' },
+                        { id: 'faceWithEnvelopeImage', name: 'faceWithEnvelopeImage' }
+                    ];
+                    
+                    for (const item of imageInputs) {
+                        const file = document.getElementById(item.id).files[0];
+                        if (file) {
+                            const base64 = await convertFileToBase64(file);
+                            formData[item.name] = {
+                                filename: file.name,
+                                mimeType: file.type,
+                                data: base64
+                            };
+                        }
+                    }
+                    
+                    // Send data to Google Apps Script
+                    const response = await fetch(SCRIPT_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({
+                            action: 'addRegistration',
+                            data: JSON.stringify(formData)
+                        })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        // Reset form
+                        registrationForm.reset();
+                        
+                        // Reset image previews
+                        document.getElementById('idCardPreview').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                        document.getElementById('simBackPreview').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                        document.getElementById('facePreview').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                        document.getElementById('faceWithEnvelopePreview').innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>';
+                        
+                        // Reset file name displays
+                        document.getElementById('idCardImageName').textContent = 'ยังไม่ได้เลือกไฟล์';
+                        document.getElementById('simBackImageName').textContent = 'ยังไม่ได้เลือกไฟล์';
+                        document.getElementById('faceImageName').textContent = 'ยังไม่ได้เลือกไฟล์';
+                        document.getElementById('faceWithEnvelopeImageName').textContent = 'ยังไม่ได้เลือกไฟล์';
+                        
+                        // Show success message
+                        hideLoading();
+                        showSuccess('บันทึกข้อมูลเรียบร้อยแล้ว');
+                    } else {
+                        hideLoading();
+                        alert('เกิดข้อผิดพลาด: ' + result.error);
+                    }
+                } catch (error) {
+                    hideLoading();
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการส่งข้อมูล กรุณาลองใหม่อีกครั้ง');
+                }
+            });
+        }
+        
+        // Convert file to base64
+        function convertFileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
+                    const base64String = reader.result.split(',')[1];
+                    resolve(base64String);
+                };
+                reader.onerror = error => reject(error);
+            });
+        }
+        
+        // Setup admin login
+        function setupAdminLogin() {
+            toggleAdminBtn.addEventListener('click', function() {
+                if (registrationSection.classList.contains('hidden')) {
+                    // Switch to registration form
+                    adminLoginSection.classList.add('hidden');
+                    adminDashboardSection.classList.add('hidden');
+                    registrationSection.classList.remove('hidden');
+                    toggleAdminBtn.textContent = 'เข้าสู่ระบบผู้ดูแล';
+                } else {
+                    // Switch to admin login
+                    registrationSection.classList.add('hidden');
+                    adminLoginSection.classList.remove('hidden');
+                    toggleAdminBtn.textContent = 'กลับไปยังหน้าลงทะเบียน';
+                }
+            });
+            
+            const adminLoginForm = document.getElementById('adminLoginForm');
+            adminLoginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username === 'admin' && password === '1234') {
+                    adminLoginSection.classList.add('hidden');
+                    adminDashboardSection.classList.remove('hidden');
+                    loadRegistrationData();
+                } else {
+                    alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                }
+            });
+        }
+        
+        // Setup admin dashboard
+        function setupAdminDashboard() {
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', function() {
+                adminDashboardSection.classList.add('hidden');
+                registrationSection.classList.remove('hidden');
+                toggleAdminBtn.textContent = 'เข้าสู่ระบบผู้ดูแล';
+                
+                // Clear admin form
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            });
+            
+            // Setup refresh images button
+            document.getElementById('refreshImagesBtn').addEventListener('click', function() {
+                loadFolderContents();
+            });
+        }
+        
+        // Setup tabs
+        function setupTabs() {
+            const tabs = [
+                { tab: 'tabRegistrations', content: 'contentRegistrations' },
+                { tab: 'tabImages', content: 'contentImages' },
+                { tab: 'tabSummary', content: 'contentSummary' }
+            ];
+            
+            tabs.forEach(item => {
+                document.getElementById(item.tab).addEventListener('click', function() {
+                    // Hide all content
+                    document.querySelectorAll('.tab-content').forEach(el => {
+                        el.classList.add('hidden');
+                    });
+                    
+                    // Remove active class from all tabs
+                    document.querySelectorAll('#tabRegistrations, #tabImages, #tabSummary').forEach(el => {
+                        el.classList.remove('tab-active');
+                        el.classList.add('text-gray-500');
+                        el.classList.add('hover:text-blue-600');
+                    });
+                    
+                    // Show selected content
+                    document.getElementById(item.content).classList.remove('hidden');
+                    
+                    // Set active tab
+                    this.classList.add('tab-active');
+                    this.classList.remove('text-gray-500');
+                    this.classList.remove('hover:text-blue-600');
+                    
+                    // Load data for the selected tab
+                    if (item.tab === 'tabImages' && allImages.length === 0) {
+                        loadFolderContents();
+                    } else if (item.tab === 'tabSummary') {
+                        updateSummaryData(allRegistrations);
+                    }
+                });
+            });
+        }
+        
+        // Load registration data for admin dashboard
+        async function loadRegistrationData() {
+            showLoading();
+            
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getRegistrations');
+                const result = await response.json();
+                
+                if (result.success) {
+                    allRegistrations = result.data;
+                    updateDashboardStats(allRegistrations);
+                    populateRegistrationTable(allRegistrations);
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการโหลดข้อมูล');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Load folder contents
+        async function loadFolderContents() {
+            showLoading();
+            
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=getFolderContents');
+                const result = await response.json();
+                
+                if (result.success) {
+                    allImages = result.data;
+                    populateImageGallery(allImages);
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการโหลดรูปภาพ');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Update dashboard statistics
+        function updateDashboardStats(registrations) {
+            // Total registrations
+            document.getElementById('totalRegistrations').textContent = registrations.length;
+            
+            // Today's registrations
+            const today = new Date().toISOString().split('T')[0];
+            const todayCount = registrations.filter(reg => {
+                const regDate = new Date(reg.timestamp).toISOString().split('T')[0];
+                return regDate === today;
+            }).length;
+            document.getElementById('todayRegistrations').textContent = todayCount;
+            
+            // Popular network
+            const networks = {};
+            registrations.forEach(reg => {
+                if (reg.simNetwork) {
+                    networks[reg.simNetwork] = (networks[reg.simNetwork] || 0) + 1;
+                }
+            });
+            
+            let popularNetwork = '-';
+            let maxCount = 0;
+            
+            for (const [network, count] of Object.entries(networks)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    popularNetwork = network;
+                }
+            }
+            
+            document.getElementById('popularNetwork').textContent = popularNetwork;
+        }
+        
+        // Populate registration table
+        function populateRegistrationTable(registrations) {
+            const tableBody = document.getElementById('registrationTableBody');
+            tableBody.innerHTML = '';
+            
+            if (registrations.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td colspan="7" class="py-4 px-4 text-center text-gray-500">ไม่พบข้อมูลการลงทะเบียน</td>
+                `;
+                tableBody.appendChild(row);
+                return;
+            }
+            
+            registrations.forEach((reg, index) => {
+                const row = document.createElement('tr');
+                row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                
+                const formattedDate = new Date(reg.timestamp).toLocaleString('th-TH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                const statusClass = getStatusClass(reg.status);
+                const statusText = getStatusText(reg.status);
+                
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${index + 1}</td>
+                    <td class="py-2 px-4 border-b">${reg.title} ${reg.firstName} ${reg.lastName}</td>
+                    <td class="py-2 px-4 border-b">${reg.registeredPhone}</td>
+                    <td class="py-2 px-4 border-b">${reg.simNetwork || '-'}</td>
+                    <td class="py-2 px-4 border-b">${formattedDate}</td>
+                    <td class="py-2 px-4 border-b">
+                        <span class="px-2 py-1 rounded text-white ${statusClass}">${statusText}</span>
+                    </td>
+                    <td class="py-2 px-4 border-b">
+                        <button class="view-btn px-3 py-1 bg-blue-600 text-white rounded mr-2 hover:bg-blue-700" data-index="${index}">ดูข้อมูล</button>
+                        <button class="delete-btn px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700" data-index="${index}">ลบ</button>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Add event listeners to view and delete buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    viewUserDetails(registrations[index]);
+                });
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    if (confirm('คุณต้องการลบข้อมูลนี้ใช่หรือไม่?')) {
+                        deleteRegistration(registrations[index].id);
+                    }
+                });
+            });
+        }
+        
+        // Populate image gallery
+        function populateImageGallery(images) {
+            const gallery = document.getElementById('imageGallery');
+            gallery.innerHTML = '';
+            
+            if (images.length === 0) {
+                gallery.innerHTML = '<p class="col-span-full text-center text-gray-500 py-8">ไม่พบรูปภาพในโฟลเดอร์</p>';
+                return;
+            }
+            
+            // Sort images by date (newest first)
+            images.sort((a, b) => new Date(b.dateCreated) - new Date(a.dateCreated));
+            
+            images.forEach(image => {
+                if (image.mimeType.startsWith('image/')) {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-lg shadow overflow-hidden';
+                    
+                    card.innerHTML = `
+                        <div class="h-48 overflow-hidden">
+                            <img src="${image.url}" alt="${image.name}" class="w-full h-full object-cover cursor-pointer image-thumbnail" data-url="${image.url}" data-name="${image.name}">
+                        </div>
+                        <div class="p-3">
+                            <p class="text-sm text-gray-600 truncate" title="${image.name}">${image.name}</p>
+                            <p class="text-xs text-gray-500">${new Date(image.dateCreated).toLocaleString('th-TH')}</p>
+                            <a href="${image.url}" target="_blank" class="text-blue-600 text-sm hover:underline mt-1 inline-block">เปิดในแท็บใหม่</a>
+                        </div>
+                    `;
+                    
+                    gallery.appendChild(card);
+                }
+            });
+            
+            // Add event listeners to image thumbnails
+            document.querySelectorAll('.image-thumbnail').forEach(img => {
+                img.addEventListener('click', function() {
+                    const url = this.getAttribute('data-url');
+                    const name = this.getAttribute('data-name');
+                    openImageModal(url, name);
+                });
+            });
+        }
+        
+        // Update summary data
+        function updateSummaryData(registrations) {
+            // Network distribution
+            const networkDistribution = document.getElementById('networkDistribution');
+            networkDistribution.innerHTML = '';
+            
+            const networks = {};
+            registrations.forEach(reg => {
+                if (reg.simNetwork) {
+                    networks[reg.simNetwork] = (networks[reg.simNetwork] || 0) + 1;
+                }
+            });
+            
+            const networkColors = {
+                'AIS': 'bg-green-500',
+                'DTAC': 'bg-blue-500',
+                'TRUE': 'bg-red-500',
+                'NT': 'bg-purple-500',
+                'อื่นๆ': 'bg-gray-500'
+            };
+            
+            for (const [network, count] of Object.entries(networks)) {
+                const percentage = (count / registrations.length * 100).toFixed(1);
+                const color = networkColors[network] || 'bg-gray-500';
+                
+                const item = document.createElement('div');
+                item.className = 'mb-3';
+                item.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium">${network}</span>
+                        <span class="text-sm font-medium">${count} คน (${percentage}%)</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="${color} h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                networkDistribution.appendChild(item);
+            }
+            
+            // Status distribution
+            const statusDistribution = document.getElementById('statusDistribution');
+            statusDistribution.innerHTML = '';
+            
+            const statuses = {
+                'pending': 0,
+                'approved': 0,
+                'rejected': 0
+            };
+            
+            registrations.forEach(reg => {
+                const status = reg.status || 'pending';
+                statuses[status] = (statuses[status] || 0) + 1;
+            });
+            
+            const statusColors = {
+                'pending': 'bg-yellow-500',
+                'approved': 'bg-green-500',
+                'rejected': 'bg-red-500'
+            };
+            
+            const statusLabels = {
+                'pending': 'รอการตรวจสอบ',
+                'approved': 'อนุมัติแล้ว',
+                'rejected': 'ปฏิเสธ'
+            };
+            
+            for (const [status, count] of Object.entries(statuses)) {
+                const percentage = (count / registrations.length * 100).toFixed(1);
+                const color = statusColors[status];
+                const label = statusLabels[status];
+                
+                const item = document.createElement('div');
+                item.className = 'mb-3';
+                item.innerHTML = `
+                    <div class="flex justify-between mb-1">
+                        <span class="text-sm font-medium">${label}</span>
+                        <span class="text-sm font-medium">${count} คน (${percentage}%)</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div class="${color} h-2.5 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+                
+                statusDistribution.appendChild(item);
+            }
+            
+            // Daily registrations
+            const dailyRegistrations = document.getElementById('dailyRegistrations');
+            dailyRegistrations.innerHTML = '';
+            
+            // Get last 7 days
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                days.push({
+                    date: date,
+                    dateString: date.toISOString().split('T')[0],
+                    count: 0
+                });
+            }
+            
+            // Count registrations for each day
+            registrations.forEach(reg => {
+                const regDate = new Date(reg.timestamp).toISOString().split('T')[0];
+                const day = days.find(d => d.dateString === regDate);
+                if (day) {
+                    day.count++;
+                }
+            });
+            
+            // Find max count for scaling
+            const maxCount = Math.max(...days.map(d => d.count), 1);
+            
+            // Create bars
+            days.forEach(day => {
+                const height = day.count > 0 ? (day.count / maxCount * 100) : 5;
+                const formattedDate = day.date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+                
+                const bar = document.createElement('div');
+                bar.className = 'flex flex-col items-center flex-1';
+                bar.innerHTML = `
+                    <div class="text-xs mb-1">${day.count}</div>
+                    <div class="bg-blue-500 w-full rounded-t" style="height: ${height}%"></div>
+                    <div class="text-xs mt-1">${formattedDate}</div>
+                `;
+                
+                dailyRegistrations.appendChild(bar);
+            });
+        }
+        
+        // View user details
+        function viewUserDetails(userData) {
+            currentUserData = userData;
+            
+            // Populate user data
+            document.getElementById('viewFullName').textContent = `${userData.title} ${userData.firstName} ${userData.lastName}`;
+            document.getElementById('viewBirthDate').textContent = formatDate(userData.birthDate);
+            document.getElementById('viewRegisteredPhone').textContent = userData.registeredPhone;
+            document.getElementById('viewCurrentPhone').textContent = userData.currentPhone;
+            document.getElementById('viewSimNetwork').textContent = userData.simNetwork;
+            document.getElementById('viewRegistrationDate').textContent = new Date(userData.timestamp).toLocaleString('th-TH');
+            
+            // Set status
+            const statusElement = document.getElementById('viewStatus');
+            statusElement.textContent = getStatusText(userData.status);
+            statusElement.className = `px-2 py-1 rounded text-white ${getStatusClass(userData.status)}`;
+            
+            // Set images
+            if (userData.idCardImageUrl) {
+                document.getElementById('viewIdCardImage').src = userData.idCardImageUrl;
+                document.getElementById('viewIdCardImageLink').href = userData.idCardImageUrl;
+            }
+            
+            if (userData.simBackImageUrl) {
+                document.getElementById('viewSimBackImage').src = userData.simBackImageUrl;
+                document.getElementById('viewSimBackImageLink').href = userData.simBackImageUrl;
+            }
+            
+            if (userData.faceImageUrl) {
+                document.getElementById('viewFaceImage').src = userData.faceImageUrl;
+                document.getElementById('viewFaceImageLink').href = userData.faceImageUrl;
+            }
+            
+            if (userData.faceWithEnvelopeImageUrl) {
+                document.getElementById('viewFaceWithEnvelopeImage').src = userData.faceWithEnvelopeImageUrl;
+                document.getElementById('viewFaceWithEnvelopeImageLink').href = userData.faceWithEnvelopeImageUrl;
+            }
+            
+            // Show modal
+            viewUserModal.classList.remove('hidden');
+        }
+        
+        // Open image modal
+        function openImageModal(url, name) {
+            document.getElementById('modalImage').src = url;
+            document.getElementById('modalImageName').textContent = name;
+            viewImageModal.classList.remove('hidden');
+        }
+        
+        // Delete registration
+        async function deleteRegistration(id) {
+            showLoading();
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'deleteRegistration',
+                        id: id
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Reload data
+                    loadRegistrationData();
+                    
+                    // Close modal if open
+                    if (!viewUserModal.classList.contains('hidden')) {
+                        viewUserModal.classList.add('hidden');
+                    }
+                    
+                    showSuccess('ลบข้อมูลเรียบร้อยแล้ว');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการลบข้อมูล');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Update registration status
+        async function updateRegistrationStatus(id, status) {
+            showLoading();
+            
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({
+                        action: 'updateStatus',
+                        id: id,
+                        status: status
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update current user data
+                    currentUserData.status = status;
+                    
+                    // Update status in modal
+                    const statusElement = document.getElementById('viewStatus');
+                    statusElement.textContent = getStatusText(status);
+                    statusElement.className = `px-2 py-1 rounded text-white ${getStatusClass(status)}`;
+                    
+                    // Reload data
+                    loadRegistrationData();
+                    
+                    showSuccess('อัปเดตสถานะเรียบร้อยแล้ว');
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาดในการอัปเดตสถานะ');
+            } finally {
+                hideLoading();
+            }
+        }
+        
+        // Setup modals
+        function setupModals() {
+            // Close success modal
+            document.getElementById('closeSuccessModal').addEventListener('click', function() {
+                successModal.classList.add('hidden');
+            });
+            
+            // Close view user modal
+            document.getElementById('closeViewUserModal').addEventListener('click', function() {
+                viewUserModal.classList.add('hidden');
+            });
+            
+            // Close view image modal
+            document.getElementById('closeViewImageModal').addEventListener('click', function() {
+                viewImageModal.classList.add('hidden');
+            });
+            
+            // Delete user button in modal
+            document.getElementById('deleteUserBtn').addEventListener('click', function() {
+                if (currentUserData && confirm('คุณต้องการลบข้อมูลนี้ใช่หรือไม่?')) {
+                    deleteRegistration(currentUserData.id);
+                }
+            });
+            
+            // Approve button
+            document.getElementById('approveBtn').addEventListener('click', function() {
+                if (currentUserData) {
+                    updateRegistrationStatus(currentUserData.id, 'approved');
+                }
+            });
+            
+            // Reject button
+            document.getElementById('rejectBtn').addEventListener('click', function() {
+                if (currentUserData) {
+                    updateRegistrationStatus(currentUserData.id, 'rejected');
+                }
+            });
+        }
+        
+        // Helper functions
+        function showLoading() {
+            loadingModal.classList.remove('hidden');
+        }
+        
+        function hideLoading() {
+            loadingModal.classList.add('hidden');
+        }
+        
+        function showSuccess(message) {
+            document.getElementById('successMessage').textContent = message;
+            successModal.classList.remove('hidden');
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('th-TH', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        function getStatusText(status) {
+            switch (status) {
+                case 'approved': return 'อนุมัติแล้ว';
+                case 'rejected': return 'ปฏิเสธ';
+                default: return 'รอการตรวจสอบ';
+            }
+        }
+        
+        function getStatusClass(status) {
+            switch (status) {
+                case 'approved': return 'bg-green-500';
+                case 'rejected': return 'bg-red-500';
+                default: return 'bg-yellow-500';
+            }
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d71eeb07703f4f',t:'MTc0Njg1NTgyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
